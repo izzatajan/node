@@ -1,0 +1,20 @@
+const express = require("express");
+const cors = require("cors");
+const port = 3000;
+const app = express();
+const corsOptions = { //this is from where you can call in this case i am using vite
+  origin: "http://localhost:5173",
+};
+
+app.use(cors(corsOptions)); // Enable CORS
+
+let myarr = ["Mike Tyson", "Conor Mccregor", "Izzatbek", "John Cena"];
+
+app.get("/api", (req, res) => {
+  res.json(myarr);
+  console.log(myarr);
+});
+
+app.listen(port, function () {
+  console.log(`Example app listening on port ${port}!`);
+});
