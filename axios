@@ -2,5 +2,5 @@ const SendReq = async () => {
   let requrl = "http://localhost:5000/api"
   let data = { mydata1, mydata2, mydata3 }
   let headers = { Authorization: userid }
-  const responswatchmov = await axios.post(requrl, data, headers  ) // make sure ordered correctly 1)url 2)data 3)headers
+  const responswatchmov = await axios.post(requrl, data, { headers }  ) // make sure ordered correctly 1)url 2)data 3)headers and put headers inside an object
 }
