@@ -18,3 +18,17 @@ app.get("/api", (req, res) => {
 app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`);
 });
+
+//vite.config.js
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
+  },
+})
