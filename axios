@@ -1,8 +1,21 @@
-const SendReq = async () => {
-  let requrl = "http://localhost:5000/api"
+const handlePost = async () => {
+  let requrl = `${backendurl}/mycollection`
   let data = { mydata1, mydata2, mydata3 }
   let myconfig = {
         headers : { Authorization: `Bearer ${token}`  }
   }
   const response = await axios.post( requrl, data, myconfig ); // make sure ordered correctly 1)url 2)data 3)headers and put headers inside an object
 }
+
+const handleDelete = async (id) => {
+    try {
+        let requrl = `${backendurl}/jobs/${id}`
+        let myconfig = {
+                headers : { Authorization: `Bearer ${token}`  }
+        }
+        await axios.delete(requrl, myconfig);
+        alert('Job deleted successfully');
+    } catch (error) {
+        alert('Failed to delete the job. Please try again.');
+    }
+};
