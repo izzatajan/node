@@ -1,0 +1,53 @@
+require("dotenv").config();
+const { Client } = require("@microsoft/microsoft-graph-client");
+const { ClientSecretCredential } = require("@azure/identity");
+
+const credential = new ClientSecretCredential(
+  process.env.TENANT_ID,
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET
+);
+
+async function sendEmail(to, subject, body) {
+  try {
+    const client = Client.initWithMiddleware({
+      authProvider: {
+        getAccessToken: async () => {
+          const token = await credential.getToken("https://graph.microsoft.com/.default");
+          return token.token;
+        },
+      },
+    });
+
+    const emailMessage = {
+      message: {
+        subject: subject,
+        body: {
+          contentType: "HTML",
+          content: body,
+        },
+        toRecipients: [{ emailAddress: { address: to } }],
+      },
+    };
+
+    await client.api(`/users/${process.env.EMAIL_FROM}/sendMail`).post(emailMessage);
+    console.log("✅ Email sent to:", to);
+  } catch (error) {
+    console.error("❌ Error sending email:", error);
+  }
+}
+
+// Example Usage
+sendEmail(
+  "info@slimza.co.uk",
+  "Welcome to Slimza!",
+  `<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5;">
+      <p>Dear Valued Customer,</p>  
+      <p>Welcome to <strong>Slimza</strong>! We're excited to have you with us.</p>  
+      <p>Your order has been successfully processed. Thank you for choosing us!</p>  
+      <p>If you have any questions or need assistance, feel free to reach out.</p>  
+      <p>Best regards,</p>  
+      <p><strong>The Slimza Team</strong></p>
+  </div>`
+);
+
